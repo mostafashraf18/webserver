@@ -23,8 +23,9 @@ int main() {
   html_data = fopen("index.html", "r");
 
   char response[1024];
-  fgets(response, 1024, html_data);
-
+  size_t chars_read = fread( response, 1, sizeof response - 1, html_data );
+response[chars_read] = '\0';
+  
   char http_header[2048] = "HTTP/1.1 200 OK\r\n";
   strcat(http_header, "Content-Type: text/html\r\n");
   strcat(http_header, "\r\n");
@@ -36,11 +37,8 @@ int main() {
 
   struct sockaddr_in server_address;
   server_address.sin_family = AF_INET;
-  server_address.sin_port = htons(8001);
+  server_address.sin_port = htons(8080);
   server_address.sin_addr.s_addr = INADDR_ANY;
-  
-
-  
   
   bind(server_socket, (struct sockaddr *) &server_address, sizeof(server_address));
 
@@ -52,10 +50,6 @@ int main() {
     send(client_socket, http_header, sizeof(http_header), 0);
     close(client_socket);
   }
-  
-  
-  
+   
   return 0;
-  
-
 }
