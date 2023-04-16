@@ -25,7 +25,9 @@ int main() {
   char response[1024];
   fgets(response, 1024, html_data);
 
-  char http_header[2048] = "HTTP/1.1 200 OK\r\n\n";
+  char http_header[2048] = "HTTP/1.1 200 OK\r\n";
+  strcat(http_header, "Content-Type: text/html\r\n");
+  strcat(http_header, "\r\n");
   strcat(http_header, response);
 
   int server_socket;
